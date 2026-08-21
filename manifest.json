@@ -1,0 +1,82 @@
+{
+  "schemaVersion": 1,
+  "id": "io.github.jeremylongshore.docket",
+  "name": "Docket",
+  "version": "1.0.0",
+  "author": "Jeremy Longshore",
+  "license": "MIT",
+  "description": "The GitHub pull requests that are waiting on you, as a queue you drain rather than a feed you scroll. Oldest obligation first, with a review clock that marks anything you are late on, and a dismissal that expires the moment the pull request changes.",
+  "kinds": [
+    "service",
+    "bar-widget"
+  ],
+  "entryPoints": {
+    "service": "Service.qml",
+    "barWidget": "BarWidget.qml"
+  },
+  "barWidget": {
+    "displayName": "Docket",
+    "description": "One GitHub GraphQL call every 15 minutes answers one question: what is waiting on me. Three lanes, oldest first, overdue marked. The pill collapses to nothing when the docket is clear. Connect with docket-login; the widget never puts your token in a process argument.",
+    "category": "Developer Tools",
+    "aliases": [
+      "docket",
+      "pull-requests",
+      "review-queue",
+      "code-review",
+      "github-prs"
+    ],
+    "allowMultiple": false,
+    "defaultSection": "right",
+    "defaults": {
+      "notifications": "On",
+      "slaHours": 24,
+      "botPullRequests": "Hide",
+      "myDrafts": "Hide"
+    },
+    "schema": [
+      {
+        "key": "notifications",
+        "type": "enum",
+        "label": "Desktop notifications",
+        "options": [
+          "On",
+          "Off"
+        ],
+        "defaultValue": "On",
+        "description": "Notify when a pull request newly lands on your docket. Never on the first run, never on an error, never on something you already dismissed."
+      },
+      {
+        "key": "slaHours",
+        "type": "integer",
+        "label": "Review clock (hours)",
+        "min": 1,
+        "max": 168,
+        "step": 1,
+        "defaultValue": 24,
+        "description": "How long a pull request may sit on your docket before it counts as overdue. Overdue rows carry a marker and turn the pill to the bar alert color."
+      },
+      {
+        "key": "botPullRequests",
+        "type": "enum",
+        "label": "Bot-authored pull requests",
+        "options": [
+          "Hide",
+          "Show"
+        ],
+        "defaultValue": "Hide",
+        "description": "Dependency bots open more review requests than people do and never age out. Hidden by default so the queue reflects human obligation."
+      },
+      {
+        "key": "myDrafts",
+        "type": "enum",
+        "label": "Your own drafts",
+        "options": [
+          "Hide",
+          "Show"
+        ],
+        "defaultValue": "Hide",
+        "description": "A draft is waiting on you by definition, so showing them drowns the real signal. Hidden by default."
+      }
+    ]
+  }
+}

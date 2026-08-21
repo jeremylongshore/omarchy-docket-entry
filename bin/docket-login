@@ -1,0 +1,138 @@
+#!/usr/bin/env bash
+# Docket login. The ONLY code that ever writes the credentials file, and the
+# only shell script this plugin ships: everything else runs inside Quickshell,
+# because a stock Omarchy install has no node on the session PATH.
+#
+#   gh auth token | docket-login          (zero typing, if you have the gh CLI)
+#   printf %s "$TOKEN" | docket-login     (piped from anywhere)
+#   docket-login                          (interactive: silent paste at the prompt)
+#   docket-login --forget
+#
+# The token is read from STDIN, never from argv, so it never lands in shell
+# history or a world-readable /proc/<pid>/cmdline. It reaches curl through
+# `--header @-` (stdin) as well, so it is never visible to ps. Make a token at
+# https://github.com/settings/tokens/new?scopes=repo&description=Docket
+#
+# Scope guidance: `repo` is the minimum that sees everything, because private
+# pull requests really do appear in a review queue. `public_repo` alone works
+# and silently omits every private one. A fine-grained token wants Pull
+# requests: Read plus Contents: Read (Contents is what makes the check rollup
+# readable), and is the better choice because `repo` is read/write on every
+# private repository you can reach, which is a wide blast radius for a desktop
+# widget to hold. Set an expiry.
+set -euo pipefail
+set +x   # never trace: a trace prints the token
+
+STATE_DIR="${XDG_STATE_HOME:-$HOME/.local/state}/omarchy/docket"
+CREDS="$STATE_DIR/credentials.json"
+API="https://api.github.com"
+
+die() { printf 'docket-login: %s\n' "$1" >&2; exit 1; }
+
+for dep in curl jq; do
+  command -v "$dep" >/dev/null 2>&1 || die "$dep is required but not installed"
+done
+
+IMPORT_GH=0
+while [[ $# -gt 0 ]]; do
+  case "$1" in
+    --forget)
+      rm -f "$CREDS"
+      printf 'docket-login: credentials removed. Deleting the file is not revocation: revoke the token at https://github.com/settings/tokens\n' >&2
+      exit 0
+      ;;
+    --import-gh) IMPORT_GH=1; shift ;;
+    --token|--token=*)
+      die 'pass the token on STDIN, not --token (an argv token leaks via shell history and ps). Use: gh auth token | docket-login'
+      ;;
+    -h|--help)
+      sed -n '2,26p' "$0" >&2
+      exit 0
+      ;;
+    *) shift ;;
+  esac
+done
+
+# ---- Acquire the token. Three paths, every one of them a pipe or stdin.
+TOKEN=""
+if [[ ! -t 0 ]]; then
+  # Piped: gh auth token | docket-login   or   printf %s "$TOKEN" | docket-login
+  IFS= read -r TOKEN || true
+elif (( IMPORT_GH )) || command -v gh >/dev/null 2>&1; then
+  command -v gh >/dev/null 2>&1 || die 'gh is not installed'
+  if (( ! IMPORT_GH )); then
+    # The polarity here used to be inverted (a DECLINE set the import flag) and
+    # the flag was then never read again, so `gh auth token` ran unconditionally
+    # and the manual-paste branch was unreachable whenever gh was installed and
+    # authenticated. Answering `n` because you want a narrow fine-grained token
+    # got you gh's broad OAuth token instead, written to credentials.json and
+    # handed to a long-lived desktop widget. Both halves are fixed: Y or empty
+    # sets the flag, and the gh call is guarded by it.
+    printf 'Found the gh CLI. Import its token so you type nothing? [Y/n] ' >&2
+    IFS= read -r ANSWER || true
+    if [[ ${ANSWER:-Y} =~ ^[Yy]([Ee][Ss])?$ ]]; then IMPORT_GH=1; else IMPORT_GH=0; fi
+  fi
+  if (( IMPORT_GH )); then
+    # gh writes to stdout, so the token goes into a shell variable and never
+    # becomes another process's argv.
+    TOKEN=$(gh auth token 2>/dev/null || true)
+    [[ -n $TOKEN ]] || printf 'gh has no token.\n' >&2
+  fi
+  if [[ -z $TOKEN ]]; then
+    printf 'Paste a GitHub token, then press Enter:\n' >&2
+    IFS= read -rs TOKEN || true
+    printf '\n' >&2
+  fi
+else
+  printf 'Paste a GitHub token (scope: repo), then press Enter:\n' >&2
+  IFS= read -rs TOKEN || true
+  printf '\n' >&2
+fi
+
+TOKEN="${TOKEN//[$'\r\n']/}"
+[[ -n $TOKEN ]] || die 'no token on stdin'
+[[ $TOKEN =~ ^(gh[posur]_[A-Za-z0-9]{36,255}|github_pat_[A-Za-z0-9_]{22,255}|[a-f0-9]{40})$ ]] \
+  || die 'that does not look like a GitHub token'
+
+# -p with -m only applies the mode to the deepest directory (SC2174), so the
+# mode is set explicitly. The directory mode is the real confinement: state.json
+# inherits usable protection from it regardless of the umask that produced it.
+mkdir -p "$STATE_DIR"
+chmod 700 "$STATE_DIR"
+HDR="$STATE_DIR/.hdr.$$"
+trap 'rm -f "$HDR"' EXIT
+
+# One lookup proves the token works and resolves the account. The Authorization
+# header rides stdin, so the token is invisible to ps. -D captures the response
+# headers so a classic token's scope list can be advised on. -fsS is correct
+# HERE (unlike the poller) because a non-2xx during login is simply fatal.
+RESPONSE=$(printf 'Authorization: Bearer %s\n' "$TOKEN" | curl -fsS -D "$HDR" \
+  --proto '=https' --max-time 20 --max-filesize 2000000 \
+  -H 'Accept: application/vnd.github+json' \
+  -H 'X-GitHub-Api-Version: 2022-11-28' \
+  -H 'User-Agent: docket/1.0 (Omarchy bar widget)' \
+  --header @- -- "$API/user") || die 'lookup failed. Check the token and its network access.'
+
+LOGIN=$(printf '%s' "$RESPONSE" | jq -r '.login // empty')
+[[ -n $LOGIN ]] || die 'could not parse the user lookup response'
+[[ $LOGIN =~ ^[A-Za-z0-9-]{1,39}$ ]] || die 'the resolved login is not a valid GitHub handle'
+
+# Advisory only. A fine-grained token returns an EMPTY scope header, so a
+# missing header must never be treated as a failure or every fine-grained
+# token is rejected wrongly.
+SCOPES=$(tr -d '\r' < "$HDR" | awk -F': ' 'tolower($1)=="x-oauth-scopes"{print $2}')
+if [[ -n ${SCOPES:-} && $SCOPES != *repo* ]]; then
+  printf 'docket-login: warning, this classic token lists no repo scope. Private pull requests will be missing.\n' >&2
+fi
+
+# mkdir -m 700 BEFORE mktemp: the directory mode is the real gate, because
+# mktemp inside a 0755 directory leaves a window between create and chmod.
+TMP=$(mktemp "$CREDS.XXXXXX")
+chmod 600 "$TMP"
+jq -n --arg t "$TOKEN" --arg l "$LOGIN" '{token:$t, login:$l, host:"github.com"}' > "$TMP"
+mv "$TMP" "$CREDS"   # atomic replace: a reader never sees a partial file
+
+# The last four characters are the only part of the token allowed to leave the
+# credentials file, here or anywhere else.
+printf 'docket-login: connected as %s (token ending %s). The widget picks it up within a minute.\n' \
+  "$LOGIN" "${TOKEN: -4}" >&2

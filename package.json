@@ -1,0 +1,9 @@
+{
+  "name": "omarchy-docket",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Docket widget for the Omarchy bar - node is used ONLY to run the offline unit suite; the shipped plugin requires no node runtime",
+  "scripts": {
+    "test": "node --test tests/*.test.js"
+  }
+}

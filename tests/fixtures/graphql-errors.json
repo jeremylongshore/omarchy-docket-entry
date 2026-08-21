@@ -1,0 +1,8 @@
+{
+ "errors": [
+  {
+   "type": "FORBIDDEN",
+   "message": "Resource not accessible"
+  }
+ ]
+}

