@@ -70,7 +70,12 @@ Item {
   property var lastParsed: null
   property string fetchNotice: ""
 
-  signal stateChanged()
+  // NOT `stateChanged`. Item already carries a `state` property, so its
+  // property-change signal `stateChanged` exists on every Item, and
+  // redeclaring it is an invalid override: Quickshell logged
+  // "qt.qml.invalidOverride ... Duplicate signal name" against this line
+  // on every shell start. Renamed to the thing it actually announces.
+  signal storeChanged()
 
   // ------------------------------------------------------------- settings
 
@@ -351,7 +356,7 @@ Item {
     internalFile.setText(JSON.stringify(root.internal))
     // A JS array mutated in place emits no change notification, so the panel
     // would render stale forever without this signal plus its revision bump.
-    root.stateChanged()
+    root.storeChanged()
   }
 
   function loadCredentials(raw) {
@@ -377,7 +382,7 @@ Item {
   function maybeStart() {
     // Emit on BOTH the loaded and the load-failed path, so a panel that opened
     // before the first read still leaves its waiting state.
-    if (!root.stateLoaded || !root.credsLoaded) { root.stateChanged(); return }
+    if (!root.stateLoaded || !root.credsLoaded) { root.storeChanged(); return }
     root.readSettings()
     root.persist()
     root.poll()
@@ -466,5 +471,21 @@ Item {
     running: true
     repeat: true
     onTriggered: root.poll()
+  }
+
+  // credentials.json does not exist on a fresh install, and a FileView watch
+  // placed on a path with no file never fires when that file is later created:
+  // measured on the rig, running docket-login against a live shell left the
+  // pill on "Docket: connect" indefinitely, and only a shell restart picked the
+  // token up. That is the same shape as the node-on-PATH class - installs
+  // cleanly, then silently never populates - so it gets a poll rather than a
+  // promise. It runs ONLY while unconfigured, so a connected shell does no
+  // repeated work, and it is what makes the documented "the widget picks it up
+  // within a minute" true.
+  Timer {
+    interval: 15000
+    running: root.credsLoaded && !root.configured
+    repeat: true
+    onTriggered: credsFile.reload()
   }
 }

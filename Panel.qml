@@ -118,10 +118,15 @@ Panel {
       && typeof root.service.markSetupSeen === "function") root.service.markSetupSeen()
   }
 
+  // Follows the service's renamed store signal. The old name collided with
+  // Item's own `stateChanged` property-change signal, so this handler was
+  // really riding an accidental Item signal that Qt logged as an invalid
+  // override on every start. `ignoreUnknownSignals` is exactly why that
+  // mistake was survivable and exactly why it stayed invisible.
   Connections {
     target: root.service
     ignoreUnknownSignals: true
-    function onStateChanged() { root.revision++ }
+    function onStoreChanged() { root.revision++ }
   }
 
   // ---- Rows. Three lanes flattened into one list the cursor walks; headers
@@ -407,6 +412,15 @@ Panel {
                   return s
                 }
                 textFormat: Text.PlainText
+                // Prose, and every clause in it is data driven (counts, the
+                // truncation notice, a mapped error), so its length is not
+                // authored. Without a width and a wrap it laid out on one line
+                // and the panel clipped it: the live capture read
+                // "... 101 newer not fetched . c" with "checked just now"
+                // sheared off at the edge. Bound it to the hero column and let
+                // it wrap.
+                width: heroCol.width
+                wrapMode: Text.WordWrap
                 color: root.bar ? Qt.darker(root.bar.foreground, 1.4) : Color.muted
                 font.family: root.bar ? root.bar.fontFamily : Style.font.family
                 font.pixelSize: Style.font.caption
@@ -520,6 +534,13 @@ Panel {
               }
 
               Row {
+                // The row is anchored on BOTH sides, so its width is the real
+                // space between the left margin and the age gutter. That width
+                // is what the flexible title must be measured against: a Row
+                // positioner does not clip or shrink its children, so children
+                // whose widths sum past it simply paint over whatever is to the
+                // right, which here is the age label.
+                id: rowLine
                 visible: !rowItem.isInert
                 anchors.left: parent.left
                 anchors.leftMargin: Style.space(16)
@@ -531,6 +552,7 @@ Panel {
                 // Past the review clock. The one thing no other GitHub bar
                 // widget tells you: not what is waiting, but what you are late on.
                 Text {
+                  id: overdueDot
                   visible: rowItem.modelData.overdue === true
                   text: "●"
                   textFormat: Text.PlainText
@@ -561,13 +583,25 @@ Panel {
                   textFormat: Text.PlainText
                   anchors.verticalCenter: parent.verticalCenter
                   elide: Text.ElideLeft
-                  width: Math.min(implicitWidth, Math.round(contentColumn.width * 0.30))
+                  maximumLineCount: 1
+                  width: Math.min(implicitWidth, Math.round(rowLine.width * 0.30))
                   color: root.bar ? Qt.darker(root.bar.foreground, 1.35) : Color.muted
                   font.family: root.bar ? root.bar.fontFamily : Style.font.family
                   font.pixelSize: Style.font.bodySmall
                 }
 
                 Text {
+                  // The title is the ONE elastic column: it takes whatever the
+                  // row has left after the fixed-share repo name, the reason,
+                  // the overdue dot and the gaps between them. The previous
+                  // bound was a constant subtracted from the COLUMN width
+                  // (contentColumn.width - space(300)), which ignored both the
+                  // age gutter and the two 30-percent siblings, so on a narrow
+                  // panel the children summed past the row and the reason text
+                  // painted straight through the age label. The live capture
+                  // showed "conflicts, chec" overprinting "148d" on the very
+                  // rows the overdue dot says you are late on.
+                  id: titleLabel
                   text: rowItem.isInert ? "" : rowItem.modelData.title
                   textFormat: Text.PlainText
                   anchors.verticalCenter: parent.verticalCenter
@@ -577,12 +611,17 @@ Panel {
                   font.bold: rowItem.modelData.overdue === true
                   elide: Text.ElideRight
                   maximumLineCount: 1
-                  width: Math.max(0, contentColumn.width - Style.space(300))
+                  width: Math.max(0, rowLine.width
+                    - repoLabel.width
+                    - (overdueDot.visible ? overdueDot.width + rowLine.spacing : 0)
+                    - (reasonLabel.visible ? reasonLabel.width + rowLine.spacing : 0)
+                    - rowLine.spacing)
                 }
 
                 Text {
                   // The spoof warning goes in the column the user already reads
                   // for explanations, in words.
+                  id: reasonLabel
                   readonly property string reasonText: rowItem.isInert ? "" :
                     (rowItem.modelData.repoSpoofy
                       ? "look-alike repo name" + (rowItem.modelData.reason ? ", " : "")
@@ -592,7 +631,8 @@ Panel {
                   textFormat: Text.PlainText
                   anchors.verticalCenter: parent.verticalCenter
                   elide: Text.ElideRight
-                  width: Math.min(implicitWidth, Math.round(contentColumn.width * 0.30))
+                  maximumLineCount: 1
+                  width: Math.min(implicitWidth, Math.round(rowLine.width * 0.30))
                   color: root.bar ? Qt.darker(root.bar.foreground, 1.45) : Color.muted
                   font.family: root.bar ? root.bar.fontFamily : Style.font.family
                   font.pixelSize: Style.font.caption
