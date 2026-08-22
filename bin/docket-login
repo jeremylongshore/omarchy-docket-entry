@@ -129,7 +129,16 @@ fi
 # mktemp inside a 0755 directory leaves a window between create and chmod.
 TMP=$(mktemp "$CREDS.XXXXXX")
 chmod 600 "$TMP"
-jq -n --arg t "$TOKEN" --arg l "$LOGIN" '{token:$t, login:$l, host:"github.com"}' > "$TMP"
+# The token rides stdin here for the same reason it rides stdin into curl
+# above: --arg places the value in jq's argv, and /proc/<pid>/cmdline is
+# world-readable, so any other local user could read the whole credential for
+# as long as jq ran. /proc/<pid>/environ would be owner-only and therefore
+# better than argv, but stdin is the standard this file already claims and the
+# only one that never materialises the secret outside the process.
+# -R reads the stream as a raw line, so `input` is the token as a JSON string
+# with escaping handled by jq rather than by us.
+printf '%s' "$TOKEN" | jq -Rn --arg l "$LOGIN" \
+  '{token: input, login: $l, host: "github.com"}' > "$TMP"
 mv "$TMP" "$CREDS"   # atomic replace: a reader never sees a partial file
 
 # The last four characters are the only part of the token allowed to leave the
