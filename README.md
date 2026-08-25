@@ -5,6 +5,8 @@ A drainable queue of the pull requests that are waiting on **you**, in the Omarc
 Not a GitHub dashboard. Not a feed. One question, answered on the bar: what do I owe right now,
 and what am I already late on. When you owe nothing, the widget disappears from the bar entirely.
 
+[![ko-fi](https://ko-fi.com/img/githubbutton_sm.svg)](https://ko-fi.com/U5S225PTME)
+
 ## What it shows
 
 Three lanes, ordered oldest obligation first, because the thing that has been waiting longest is
