@@ -32,12 +32,17 @@ echo "comparing against $REPO@$BRANCH"
 behind=0
 unreachable=0
 checked=0
+FETCHED="$(mktemp -t omarchy-gate-freshness.XXXXXXXX)"
+trap 'rm -f "$FETCHED"' EXIT
 
 while read -r want file; do
   [[ "$want" == \#* || -z "$want" ]] && continue
   # A 404 on a gate that exists locally means canonical DELETED it. That is
   # drift too, not an outage, so it is only forgiven when every fetch fails.
-  body=$(/usr/bin/curl -fsSL --max-time 20 "$BASE/$file" 2>/dev/null)
+  # Hash downloaded bytes from a file. Command substitution removes trailing
+  # newlines, which made every correct shell file differ from canonical once
+  # this check became fail closed.
+  /usr/bin/curl -fsSL --max-time 20 -o "$FETCHED" "$BASE/$file" 2>/dev/null
   rc=$?
   if [[ "$rc" -ne 0 ]]; then
     echo "  ?  $file — could not fetch (rc=$rc)"
@@ -45,7 +50,7 @@ while read -r want file; do
     continue
   fi
   checked=$((checked + 1))
-  got=$(/usr/bin/printf '%s' "$body" | /usr/bin/sha256sum | /usr/bin/cut -d' ' -f1)
+  got=$(/usr/bin/sha256sum "$FETCHED" | /usr/bin/cut -d' ' -f1)
   local_hash=$(cd "$GATES" && /usr/bin/sha256sum "$file" | /usr/bin/cut -d' ' -f1)
   if [[ "$got" != "$local_hash" ]]; then
     # Deliberately "differs", not "is behind": a hash comparison cannot tell
