@@ -498,7 +498,10 @@ function pruneStamps(map, liveKeys, nowMs) {
     if (!map.hasOwnProperty(k)) continue
     if (!map[k]) continue
     if (liveKeys[k]) { out[k] = now; continue }
-    var seen = num(map[k])
+    // Old releases persisted a bare boolean. Number(true) is 1, which would
+    // make a legacy dismissal look older than the retention window and erase
+    // it immediately. Convert that legacy sentinel deliberately instead.
+    var seen = map[k] === true ? 0 : num(map[k])
     if (seen <= 0) { out[k] = now; continue }      // legacy `true`
     if (now - seen < STAMP_RETENTION_MS) out[k] = seen
   }

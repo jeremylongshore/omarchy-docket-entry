@@ -1,3 +1,6 @@
 node_modules/
+coverage/
+reports/
+.stryker-tmp/
 *.tgz
 render-check.png

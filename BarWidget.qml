@@ -108,6 +108,8 @@ BarWidget {
     // color so a glance reads it without parsing the text.
     active: panelLoader.item ? panelLoader.item.isAlert === true : false
     tooltipText: panelLoader.item ? panelLoader.item.tooltip : ""
+    Accessible.role: Accessible.Button
+    Accessible.name: root.opened ? "Close Docket" : "Open Docket"
 
     onPressed: function(b) {
       if (b === Qt.MiddleButton) root.refresh()

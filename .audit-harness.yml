@@ -1,0 +1,5 @@
+# Docket is a QML frontend with an offline JavaScript model and a shipped Perl
+# credential helper. Pin the deterministic classifier residue explicitly.
+classify_pins:
+  - frontend
+  - cli

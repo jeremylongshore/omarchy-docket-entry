@@ -1,0 +1,20 @@
+{
+  "$schema": "./node_modules/@stryker-mutator/core/schema/stryker-schema.json",
+  "mutate": ["Model.js"],
+  "testRunner": "command",
+  "commandRunner": {
+    "command": "node --test tests/model.test.js tests/mutation-contract.test.js"
+  },
+  "reporters": ["clear-text", "json"],
+  "jsonReporter": {
+    "fileName": "reports/mutation/mutation.json"
+  },
+  "thresholds": {
+    "high": 95,
+    "low": 90,
+    "break": 90
+  },
+  "incremental": true,
+  "incrementalFile": "reports/mutation/incremental.json",
+  "concurrency": 2
+}

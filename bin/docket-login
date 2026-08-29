@@ -23,9 +23,9 @@
 set -euo pipefail
 set +x   # never trace: a trace prints the token
 
-STATE_DIR="${XDG_STATE_HOME:-$HOME/.local/state}/omarchy/docket"
-CREDS="$STATE_DIR/credentials.json"
 API="https://api.github.com"
+SELF_DIR="$(CDPATH='' cd -- "$(dirname -- "$0")" && pwd)"
+SECURE_STATE="$SELF_DIR/docket-secure-state"
 
 die() { printf 'docket-login: %s\n' "$1" >&2; exit 1; }
 
@@ -37,7 +37,7 @@ IMPORT_GH=0
 while [[ $# -gt 0 ]]; do
   case "$1" in
     --forget)
-      rm -f "$CREDS"
+      "$SECURE_STATE" --forget
       printf 'docket-login: credentials removed. Deleting the file is not revocation: revoke the token at https://github.com/settings/tokens\n' >&2
       exit 0
       ;;
@@ -94,12 +94,8 @@ TOKEN="${TOKEN//[$'\r\n']/}"
 [[ $TOKEN =~ ^(gh[posur]_[A-Za-z0-9]{36,255}|github_pat_[A-Za-z0-9_]{22,255}|[a-f0-9]{40})$ ]] \
   || die 'that does not look like a GitHub token'
 
-# -p with -m only applies the mode to the deepest directory (SC2174), so the
-# mode is set explicitly. The directory mode is the real confinement: state.json
-# inherits usable protection from it regardless of the umask that produced it.
-mkdir -p "$STATE_DIR"
-chmod 700 "$STATE_DIR"
-HDR="$STATE_DIR/.hdr.$$"
+HDR=$(mktemp -t docket-login-header.XXXXXXXX)
+chmod 600 "$HDR"
 trap 'rm -f "$HDR"' EXIT
 
 # One lookup proves the token works and resolves the account. The Authorization
@@ -125,21 +121,11 @@ if [[ -n ${SCOPES:-} && $SCOPES != *repo* ]]; then
   printf 'docket-login: warning, this classic token lists no repo scope. Private pull requests will be missing.\n' >&2
 fi
 
-# mkdir -m 700 BEFORE mktemp: the directory mode is the real gate, because
-# mktemp inside a 0755 directory leaves a window between create and chmod.
-TMP=$(mktemp "$CREDS.XXXXXX")
-chmod 600 "$TMP"
-# The token rides stdin here for the same reason it rides stdin into curl
-# above: --arg places the value in jq's argv, and /proc/<pid>/cmdline is
-# world-readable, so any other local user could read the whole credential for
-# as long as jq ran. /proc/<pid>/environ would be owner-only and therefore
-# better than argv, but stdin is the standard this file already claims and the
-# only one that never materialises the secret outside the process.
-# -R reads the stream as a raw line, so `input` is the token as a JSON string
-# with escaping handled by jq rather than by us.
-printf '%s' "$TOKEN" | jq -Rn --arg l "$LOGIN" \
-  '{token: input, login: $l, host: "github.com"}' > "$TMP"
-mv "$TMP" "$CREDS"   # atomic replace: a reader never sees a partial file
+# Keep the credential off argv and out of pathname-based shell writes. The
+# purpose-built Perl helper pins every parent descriptor, creates its temporary
+# entry with O_EXCL|O_NOFOLLOW, retains that descriptor through fsync and
+# replacement, and verifies object identity before and after publication.
+printf '%s\n%s\n' "$TOKEN" "$LOGIN" | "$SECURE_STATE" --write
 
 # The last four characters are the only part of the token allowed to leave the
 # credentials file, here or anywhere else.

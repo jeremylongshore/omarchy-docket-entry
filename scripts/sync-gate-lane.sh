@@ -12,7 +12,7 @@
 # writes .lane-manifest, which run-plugin-gates.sh verifies on every run.
 #
 # Usage: scripts/sync-gate-lane.sh [path-to-canonical-gates-dir]
-set -uo pipefail
+set -euo pipefail
 
 HERE="$(cd "$(dirname "$0")" && pwd)"
 DEST="$HERE/gates"
@@ -22,8 +22,12 @@ CANON_REPO="${CANON%/skills/*}"
 [[ -d "$CANON" ]] || { echo "sync-gate-lane: canonical lane not found at $CANON" >&2; exit 2; }
 
 SHA="$(git -C "$CANON_REPO" rev-parse HEAD 2>/dev/null || echo unknown)"
-DIRTY=""
-git -C "$CANON_REPO" diff --quiet 2>/dev/null || DIRTY=" (DIRTY WORKTREE)"
+SOURCE_STATUS="$(git -C "$CANON_REPO" status --porcelain --untracked-files=all 2>/dev/null || true)"
+if [[ -n "$SOURCE_STATUS" ]]; then
+  echo "sync-gate-lane: canonical source is dirty; refusing to vendor uncommitted enforcement" >&2
+  printf '%s\n' "$SOURCE_STATUS" >&2
+  exit 2
+fi
 
 # Only the content gates apply to a plugin tree. c32/c33 need rig binaries and
 # gate_skip off-rig; c37 needs a rig round trip and is enforced at submission.
@@ -41,16 +45,17 @@ git -C "$CANON_REPO" diff --quiet 2>/dev/null || DIRTY=" (DIRTY WORKTREE)"
 #
 # Deliberately excluded: c32 and c33 need rig binaries and gate_skip off-rig;
 # c37 needs a rig round trip and is enforced at submission time by the hook.
-APPLICABLE="c28 c29 c30 c31 c34 c35 c36 c38 c40"
+APPLICABLE="c28 c29 c30 c31 c34 c35 c36 c38 c40 c41 c42 c43"
 
 mkdir -p "$DEST/lib"
 copied=0
 for id in $APPLICABLE; do
-  src=$(ls "$CANON/$id"-*.sh 2>/dev/null | head -1)
-  if [[ -z "$src" ]]; then
-    echo "sync-gate-lane: WARNING $id is listed as applicable but not present in canonical" >&2
-    continue
+  matches=("$CANON/$id"-*.sh)
+  if [[ "${#matches[@]}" -ne 1 ]]; then
+    echo "sync-gate-lane: expected exactly one canonical $id gate, found ${#matches[@]}" >&2
+    exit 2
   fi
+  src="${matches[0]}"
   cp -f "$src" "$DEST/" && copied=$((copied + 1))
 done
 # Any vendored gate that is no longer applicable must go, or the lane keeps
@@ -72,17 +77,17 @@ cp -f "$CANON/lib/preamble.sh" "$DEST/lib/preamble.sh"
 
 {
   echo "# Vendored gate lane. Regenerate with scripts/sync-gate-lane.sh — never hand-edit."
-  echo "# canonical: contributing-clanker@${SHA}${DIRTY}"
+  echo "# canonical: contributing-clanker@${SHA}"
   ( cd "$DEST" && LC_ALL=C ls c*.sh lib/preamble.sh 2>/dev/null | LC_ALL=C sort | while read -r f; do
       printf '%s  %s\n' "$(sha256sum "$f" | cut -d' ' -f1)" "$f"
     done )
 } > "$DEST/.lane-manifest"
 
 AVAIL=$(echo "$APPLICABLE" | wc -w)
-echo "sync-gate-lane: $copied of $AVAIL applicable gates + preamble synced from ${SHA:0:12}${DIRTY}"
+echo "sync-gate-lane: $copied of $AVAIL applicable gates + preamble synced from ${SHA:0:12}"
 if [[ "$copied" -ne "$AVAIL" ]]; then
-  echo "sync-gate-lane: WARNING copied $copied but $AVAIL are listed applicable" >&2
+  echo "sync-gate-lane: copied $copied but $AVAIL are listed applicable" >&2
+  exit 2
 fi
 echo "sync-gate-lane: manifest written to scripts/gates/.lane-manifest"
-[[ -n "$DIRTY" ]] && echo "sync-gate-lane: WARNING canonical worktree is dirty; the recorded SHA does not describe what was copied" >&2
 exit 0

@@ -2,10 +2,10 @@
   "schemaVersion": 1,
   "id": "io.github.jeremylongshore.docket",
   "name": "Docket",
-  "version": "1.0.0",
+  "version": "1.1.0",
   "author": "Jeremy Longshore",
   "license": "MIT",
-  "description": "The GitHub pull requests that are waiting on you, as a queue you drain rather than a feed you scroll. Oldest obligation first, with a review clock that marks anything you are late on, and a dismissal that expires the moment the pull request changes.",
+  "description": "Docket turns GitHub pull requests into an obligation queue for action, not scrolling. It separates requests waiting on your review, your own blocked work, and branches ready to merge, then sorts lanes oldest first. A configurable review clock marks overdue work before it disappears in the feed. Drain a row when handled; it returns on its own when the pull request changes. One bounded GraphQL poll every 15 minutes keeps the bar quiet while credentials stay local and never enter process arguments.",
   "kinds": [
     "service",
     "bar-widget"

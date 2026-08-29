@@ -1,6 +1,12 @@
 # Docket
 
-A drainable queue of the pull requests that are waiting on **you**, in the Omarchy bar.
+![Docket: review, blocked, and ready-to-merge obligations ordered as a focused queue](assets/banner.svg)
+
+Docket turns GitHub pull requests into an obligation queue for action, not scrolling. It separates
+requests waiting on your review, your own blocked work, and branches ready to merge, then sorts
+each lane oldest first. A configurable review clock marks overdue work before it disappears in the
+feed. Drain a row when handled; it returns automatically when the pull request changes. One bounded
+GraphQL poll every 15 minutes keeps the bar quiet while credentials remain local.
 
 Not a GitHub dashboard. Not a feed. One question, answered on the bar: what do I owe right now,
 and what am I already late on. When you owe nothing, the widget disappears from the bar entirely.
@@ -170,7 +176,9 @@ state directory.
 node --test tests/*.test.js
 ```
 
-81 tests, all offline, run against captured GitHub API response bodies in `tests/fixtures/`.
+The complete suite is offline and runs against captured or scrubbed GitHub API response bodies.
+Coverage, repeated concurrent runs, mutation testing, security races, presentation gates, and the
+Buzz production render journey are all fail-closed release requirements.
 Recapture procedure: [docs/FIXTURES.md](docs/FIXTURES.md).
 
 ## License

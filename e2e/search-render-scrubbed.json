@@ -1,0 +1,71 @@
+{
+  "data": {
+    "rateLimit": { "cost": 2, "remaining": 4998 },
+    "reviewRequested": {
+      "issueCount": 2,
+      "pageInfo": { "hasNextPage": false },
+      "nodes": [
+        {
+          "number": 418, "title": "Make retry backoff visible in the worker log", "isDraft": false,
+          "createdAt": "2026-08-20T08:00:00Z", "updatedAt": "2026-08-25T08:30:00Z",
+          "author": { "login": "maya", "__typename": "User" },
+          "repository": { "nameWithOwner": "northstar/gateway", "isPrivate": true, "isArchived": false },
+          "isCrossRepository": false, "reviewDecision": "REVIEW_REQUIRED", "mergeable": "MERGEABLE",
+          "commits": { "nodes": [{ "commit": { "statusCheckRollup": { "state": "SUCCESS" } } }] },
+          "latestOpinionatedReviews": { "nodes": [] }
+        },
+        {
+          "number": 92, "title": "Document the zero-downtime rollback path", "isDraft": false,
+          "createdAt": "2026-08-28T13:00:00Z", "updatedAt": "2026-08-29T13:20:00Z",
+          "author": { "login": "nolan", "__typename": "User" },
+          "repository": { "nameWithOwner": "signalworks/runbook", "isPrivate": false, "isArchived": false },
+          "isCrossRepository": true, "reviewDecision": "REVIEW_REQUIRED", "mergeable": "MERGEABLE",
+          "commits": { "nodes": [{ "commit": { "statusCheckRollup": null } }] },
+          "latestOpinionatedReviews": { "nodes": [] }
+        }
+      ]
+    },
+    "mine": {
+      "issueCount": 4,
+      "pageInfo": { "hasNextPage": false },
+      "nodes": [
+        {
+          "number": 731, "title": "Remove the legacy deployment toggle", "isDraft": false,
+          "createdAt": "2026-08-18T09:00:00Z", "updatedAt": "2026-08-22T17:45:00Z",
+          "author": { "login": "docket-demo", "__typename": "User" },
+          "repository": { "nameWithOwner": "harbor/control-plane", "isPrivate": true, "isArchived": false },
+          "isCrossRepository": false, "reviewDecision": "CHANGES_REQUESTED", "mergeable": "MERGEABLE",
+          "commits": { "nodes": [{ "commit": { "statusCheckRollup": { "state": "FAILURE" } } }] },
+          "latestOpinionatedReviews": { "nodes": [{ "state": "CHANGES_REQUESTED" }] }
+        },
+        {
+          "number": 156, "title": "Reconcile migration ordering across regions", "isDraft": false,
+          "createdAt": "2026-08-24T10:00:00Z", "updatedAt": "2026-08-27T11:05:00Z",
+          "author": { "login": "docket-demo", "__typename": "User" },
+          "repository": { "nameWithOwner": "fieldkit/ledger", "isPrivate": false, "isArchived": false },
+          "isCrossRepository": false, "reviewDecision": "APPROVED", "mergeable": "CONFLICTING",
+          "commits": { "nodes": [{ "commit": { "statusCheckRollup": { "state": "SUCCESS" } } }] },
+          "latestOpinionatedReviews": { "nodes": [{ "state": "APPROVED" }] }
+        },
+        {
+          "number": 64, "title": "Bound webhook retries by delivery age", "isDraft": false,
+          "createdAt": "2026-08-24T07:00:00Z", "updatedAt": "2026-08-26T15:40:00Z",
+          "author": { "login": "docket-demo", "__typename": "User" },
+          "repository": { "nameWithOwner": "signalworks/relay", "isPrivate": false, "isArchived": false },
+          "isCrossRepository": false, "reviewDecision": "APPROVED", "mergeable": "MERGEABLE",
+          "commits": { "nodes": [{ "commit": { "statusCheckRollup": { "state": "SUCCESS" } } }] },
+          "latestOpinionatedReviews": { "nodes": [{ "state": "APPROVED" }] }
+        },
+        {
+          "number": 309, "title": "Ship the release manifest provenance check", "isDraft": false,
+          "createdAt": "2026-08-28T12:00:00Z", "updatedAt": "2026-08-29T14:10:00Z",
+          "author": { "login": "docket-demo", "__typename": "User" },
+          "repository": { "nameWithOwner": "northstar/releaser", "isPrivate": true, "isArchived": false },
+          "isCrossRepository": false, "reviewDecision": "APPROVED", "mergeable": "MERGEABLE",
+          "commits": { "nodes": [{ "commit": { "statusCheckRollup": { "state": "SUCCESS" } } }] },
+          "latestOpinionatedReviews": { "nodes": [{ "state": "APPROVED" }] }
+        }
+      ]
+    }
+  }
+}

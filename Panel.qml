@@ -321,6 +321,7 @@ Panel {
         root.hostWidget.broadcast("refresh")
       else root.refresh()
     }
+    function drainSelected(): void { root.drainSelected() }
   }
 
   // ---- Popup UI.
