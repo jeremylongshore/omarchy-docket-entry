@@ -68,7 +68,7 @@ test("render tooling forbids the old shared, cropped, provenance-free lane", () 
 
 test("canonical freshness hashes byte-exact downloads", () => {
   const freshness = read("scripts/check-lane-freshness.sh")
-  assert.match(freshness, /curl[^\n]*-o "\$FETCHED"/)
-  assert.match(freshness, /sha256sum "\$FETCHED"/)
-  assert.doesNotMatch(freshness, /body=\$\([^\n]*curl/)
+  assert.match(freshness, /git clone --quiet --depth 1 --branch/)
+  assert.match(freshness, /sha256sum "\$canonical"/)
+  assert.doesNotMatch(freshness, /\bcurl\b|\bwget\b/)
 })
