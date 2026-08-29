@@ -34,7 +34,8 @@ This report records the pre-remediation baseline. Final release authority comes 
 Implementation grade before the source commit and Buzz receipt: A (96/100), conditional only on the
 required clean-commit render journey.
 
-- 99/99 tests pass, including hostile same-UID credential races and the scrubbed three-lane fixture.
+- 100/100 tests pass, including hostile same-UID credential races, deterministic persisted-record
+  startup, and the scrubbed three-lane fixture.
 - Coverage is 100% statements, 100% lines, 100% functions, and 98.57% branches.
 - Three concurrent full-suite repetitions pass with zero flakes.
 - Mutation score is 92.61% across 1,150 mutants: 1,053 killed, 12 timed out as detected failures,

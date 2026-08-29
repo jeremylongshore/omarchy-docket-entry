@@ -35,6 +35,7 @@ test("service startup explicitly resolves both persisted-record reads", () => {
   assert.match(service, /Component\.onCompleted\s*:\s*\{[\s\S]*credsFile\.reload\(\)[\s\S]*internalFile\.reload\(\)/)
   assert.match(service, /if \(!root\.stateLoaded \|\| !root\.credsLoaded\)/)
   assert.match(service, /if \(root\.polling \|\| !root\.stateLoaded \|\| !root\.credsLoaded\) return/)
+  assert.match(service, /if \(root\.stateLoaded && root\.credsLoaded[\s\S]*root\.rebuild\(\)/)
 })
 
 test("marketplace copy and authored Docket banner are release artifacts", () => {
@@ -53,7 +54,14 @@ test("marketplace copy and authored Docket banner are release artifacts", () => 
 test("render tooling forbids the old shared, cropped, provenance-free lane", () => {
   const render = read("scripts/rig-render.sh")
   assert.match(render, /OMARCHY_RIG_RESOLUTION:-1280x720/)
+  assert.match(render, /OMARCHY_RIG_SCALE:-1\.25/)
   assert.match(render, /rawShellLogSha256/)
+  assert.match(render, /visualInspection:\{status:"pending"/)
   assert.match(render, /grim "\\\$SHOT"/)
   assert.doesNotMatch(render, /grim -g|pkill/)
+
+  const approval = read("scripts/approve-preview.sh")
+  assert.match(approval, /product value is visible without reading the README/)
+  assert.match(approval, /no primary content is clipped/)
+  assert.match(approval, /plugin-specific visual identity/)
 })

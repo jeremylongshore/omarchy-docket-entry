@@ -9,7 +9,7 @@ OUT="${2:-$TARGET/preview.png}"
 HOST="${OMARCHY_RIG_HOST:-intent-ops-buzz}"
 CONTAINER="${OMARCHY_RIG_CONTAINER:-omarchy-rig}"
 RES="${OMARCHY_RIG_RESOLUTION:-1280x720}"
-SCALE="${OMARCHY_RIG_SCALE:-2}"
+SCALE="${OMARCHY_RIG_SCALE:-1.25}"
 
 for tool in jq identify convert; do
   command -v "$tool" >/dev/null 2>&1 || { echo "rig-render: $tool is required" >&2; exit 2; }
@@ -213,13 +213,15 @@ PREVIEW_SHA="$(sha256sum "$OUT" | cut -d' ' -f1)"
 jq -n --arg fp "$FP" --arg commit "$SOURCE_COMMIT" --argjson dirty "$SOURCE_DIRTY" \
   --arg archive "$ARCHIVE_SHA" --arg remote "$REMOTE_SHA" --arg rig "$HOST/$CONTAINER" \
   --arg run "$REMOTE_RUN_ID" --arg logSha "$RAW_LOG_SHA" --arg sha "$PREVIEW_SHA" \
-  --arg dimensions "${DIMS/x/ x }" --arg coverage "$COVERAGE" \
+  --arg dimensions "${DIMS/x/ x }" --arg coverage "$COVERAGE" --arg scale "$SCALE" \
   --arg at "$(date -u +%Y-%m-%dT%H:%M:%SZ)" \
   '{fingerprint:$fp,sourceCommit:$commit,sourceDirty:$dirty,
     sourcePackageSha256:$archive,remotePackageSha256:$remote,rig:$rig,runId:$run,rawShellLogSha256:$logSha,
     packageBoundary:"runtime tree plus scrubbed render fixture; receipts, tests, developer scripts, reports, and preview excluded",
     evidenceBoundary:"isolated real Omarchy shell and QML under a dedicated headless compositor; scrubbed GraphQL fixture through the unchanged Service curl, parse, classify, persist, and three-lane panel path; live IPC toggle and persisted drain primary action; direct full-frame grim capture with no crop or image post-processing",
     primaryAction:"oldest selected pull request drained and persisted by the live panel",
+    storyEvidence:{laneCount:3,rowCount:6,overdueMinimum:2,allPrimaryRowsExpected:true},
+    outputScale:($scale|tonumber),visualInspection:{status:"pending",previewSha256:$sha,checks:[]},
     previewSha256:$sha,dimensions:$dimensions,nonblackCoverage:($coverage|tonumber),capturedAt:$at}' \
   > "$TARGET/.render-proof.json"
 

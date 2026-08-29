@@ -28,6 +28,8 @@ Nothing yet.
 ### Fixed
 
 - Preserve legacy boolean drain records by re-stamping them instead of expiring them as timestamp `1`.
+- Prevent the shell-settings callback from cancelling Docket's initial persisted-record read and
+  leaving the service permanently unconfigured.
 - Repair the committed changelog generator conflict and restore a valid deterministic script.
 
 ## [1.0.0] - 2026-08-22

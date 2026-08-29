@@ -119,8 +119,14 @@ Item {
     var before = root.botPullRequests + "|" + root.myDrafts + "|" + root.slaHours
       + "|" + root.notificationsMode
     root.readSettings()
-    if (before !== root.botPullRequests + "|" + root.myDrafts + "|" + root.slaHours
-      + "|" + root.notificationsMode) root.rebuild()
+    // The settings FileView can finish before internalFile. persist() writes
+    // internalFile, so rebuilding during that window cancels its in-flight
+    // initial read and stateLoaded never becomes true. Defer the rebuild; the
+    // second persistence load calls maybeStart(), which reads settings again
+    // and performs the first safe persist and poll.
+    if (root.stateLoaded && root.credsLoaded
+      && before !== root.botPullRequests + "|" + root.myDrafts + "|" + root.slaHours
+        + "|" + root.notificationsMode) root.rebuild()
   }
 
   // -------------------------------------------------------------- fetching
