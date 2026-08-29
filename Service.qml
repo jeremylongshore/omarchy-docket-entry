@@ -466,6 +466,16 @@ Item {
     onLoaded: root.onSettingsFileChanged()
   }
 
+  // FileView normally preloads a bound path, but plugin construction and the
+  // shell settings load can race: the settings callback may persist defaults
+  // before the credential/internal jobs have emitted either terminal signal.
+  // Explicit reloads make startup ordering deterministic. poll() still waits
+  // for both completion flags and its polling guard prevents a duplicate ask.
+  Component.onCompleted: {
+    credsFile.reload()
+    internalFile.reload()
+  }
+
   Timer {
     interval: root.pollIntervalSec * 1000
     running: true

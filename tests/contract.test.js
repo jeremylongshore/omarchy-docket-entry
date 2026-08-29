@@ -30,6 +30,13 @@ test("manifest entry points exist inside the repository", () => {
   }
 })
 
+test("service startup explicitly resolves both persisted-record reads", () => {
+  const service = read("Service.qml")
+  assert.match(service, /Component\.onCompleted\s*:\s*\{[\s\S]*credsFile\.reload\(\)[\s\S]*internalFile\.reload\(\)/)
+  assert.match(service, /if \(!root\.stateLoaded \|\| !root\.credsLoaded\)/)
+  assert.match(service, /if \(root\.polling \|\| !root\.stateLoaded \|\| !root\.credsLoaded\) return/)
+})
+
 test("marketplace copy and authored Docket banner are release artifacts", () => {
   const manifest = JSON.parse(read("manifest.json"))
   assert.equal(manifest.description.length, 500)
