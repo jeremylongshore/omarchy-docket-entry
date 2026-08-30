@@ -41,6 +41,8 @@ test("service startup explicitly resolves both persisted-record reads", () => {
 test("marketplace copy and authored Docket banner are release artifacts", () => {
   const manifest = JSON.parse(read("manifest.json"))
   assert.equal(manifest.description.length, 500)
+  assert.equal(manifest.barWidget.description.length, 500)
+  assert.equal(manifest.barWidget.description, manifest.description)
   assert.match(manifest.description, /review clock/)
   assert.match(manifest.description, /credentials stay local/)
   const banner = read("assets/banner.svg")

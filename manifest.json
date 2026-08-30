@@ -16,7 +16,7 @@
   },
   "barWidget": {
     "displayName": "Docket",
-    "description": "One GitHub GraphQL call every 15 minutes answers one question: what is waiting on me. Three lanes, oldest first, overdue marked. The pill collapses to nothing when the docket is clear. Connect with docket-login; the widget never puts your token in a process argument.",
+    "description": "Docket turns GitHub pull requests into an obligation queue for action, not scrolling. It separates requests waiting on your review, your own blocked work, and branches ready to merge, then sorts lanes oldest first. A configurable review clock marks overdue work before it disappears in the feed. Drain a row when handled; it returns on its own when the pull request changes. One bounded GraphQL poll every 15 minutes keeps the bar quiet while credentials stay local and never enter process arguments.",
     "category": "Developer Tools",
     "aliases": [
       "docket",
