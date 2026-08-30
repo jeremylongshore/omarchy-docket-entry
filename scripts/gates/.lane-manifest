@@ -1,5 +1,5 @@
 # Vendored gate lane. Regenerate with scripts/sync-gate-lane.sh — never hand-edit.
-# canonical: contributing-clanker@359a27cde21e60086f95a3ddee99c8920a3d7ca2
+# canonical: contributing-clanker@81239c6eea4f83a84d6268338dcecd5677c566b0
 ff620ef8278ba4358d2893cd3488ce72024880946031c53d096d436f7df62452  c28-voice-no-dashes.sh
 73a46c5e3c6d27396efdd113e0d7c660b6c1d124f754766de35b29ad98ad5d9b  c29-private-names.sh
 1ef2be2afc48af5116250a3d1cabd6f2d52b00b005b0e4a39bf698545a8d85b2  c30-md-strikethrough.sh
@@ -11,5 +11,5 @@ ff620ef8278ba4358d2893cd3488ce72024880946031c53d096d436f7df62452  c28-voice-no-d
 072cf97367815df27c3b284487e2abfc0dd04c47be88957fc2d7206fc82339cc  c40-omarchy-panel-design.sh
 ce4589582e47c759b047c89773f29c09e62eb35eac6e3f03df79d1bdc8b835bd  c41-omarchy-state-file-hygiene.sh
 67a917ac706c17712b7f21d363a7dd00a8280c01e63ab85f40f67e295060a762  c42-omarchy-local-resource-budget.sh
-4a10c9f36fef296026629db61e4ed4468daf412fc5e1a07b041bd7b049a592ab  c43-omarchy-marketplace-presentation.sh
+ae35beaf503aef4b76ba292571f3b650872abe11d80bea718563a5d3c421fa5c  c43-omarchy-marketplace-presentation.sh
 0e4ef3e709d939f5dcce8b2fa3361f2167b5c6a15462f24ad70df6304d303853  lib/preamble.sh
