@@ -62,7 +62,10 @@ INPUT="$(jq -nc --arg c "$TARGET" '{candidate:$c, action:"omarchy-submit", env:{
 blocked=0
 pass=0
 for gate in "$GATES"/c*.sh; do
-  verdict="$(printf '%s' "$INPUT" | bash "$gate" 2>/dev/null)"
+  # Feed the small JSON envelope with a here-string. A pipe lets a gate that
+  # exits before reading stdin race the producer into SIGPIPE (141), turning a
+  # deterministic invalid-verdict check into an intermittent gate crash.
+  verdict="$(bash "$gate" 2>/dev/null <<< "$INPUT")"
   # A gate that emits nothing has crashed hard. Fail closed rather than
   # silently counting it as clean, which is how a broken gate becomes theater.
   if [[ -z "$verdict" ]]; then
