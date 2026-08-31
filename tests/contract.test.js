@@ -59,6 +59,7 @@ test("render tooling forbids the old shared, cropped, provenance-free lane", () 
   assert.match(render, /OMARCHY_RIG_SCALE:-1\.25/)
   assert.match(render, /rawShellLogSha256/)
   assert.match(render, /visualInspection:\{status:"pending"/)
+  assert.match(render, /-path '\.\/e2e\/\*'/)
   assert.match(render, /grim "\\\$SHOT"/)
   assert.doesNotMatch(render, /grim -g|pkill/)
 

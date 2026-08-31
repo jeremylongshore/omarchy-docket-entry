@@ -26,7 +26,7 @@ fingerprint() {
   ( cd "$TARGET" && find . -type f \
       -not -path './.git/*' -not -path './tests/*' -not -path './scripts/*' \
       -not -path './node_modules/*' \
-      \( -name '*.qml' -o -name '*.js' -o -name 'manifest.json' -o -perm -u+x \) \
+      \( -path './e2e/*' -o -name '*.qml' -o -name '*.js' -o -name 'manifest.json' -o -perm -u+x \) \
       -print0 2>/dev/null | LC_ALL=C sort -z | xargs -0 cat 2>/dev/null \
       | sha256sum | cut -d' ' -f1 )
 }
