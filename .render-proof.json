@@ -1,12 +1,12 @@
 {
-  "fingerprint": "86011f6a8fcfb8dd6ad4c440620471f68012c8c134df33037343457c5dd48870",
-  "sourceCommit": "c53fa3bff878a97cf07258b425451b6352cccab8",
+  "fingerprint": "baa44782036b181e3af51f9496e7b68af21fe81d719b8b2bbcaca09704f8644e",
+  "sourceCommit": "8b6284f8ed39217c3a16c2c1229b19280ee932ef",
   "sourceDirty": false,
-  "sourcePackageSha256": "2eadcfbb391fbc4d6f86936626c5b41ea7b716a99ee9d04eb23d2fafbe42ed02",
-  "remotePackageSha256": "2eadcfbb391fbc4d6f86936626c5b41ea7b716a99ee9d04eb23d2fafbe42ed02",
+  "sourcePackageSha256": "90d00ce61140bc801d499ac3af93a80be9c93fddee82f170bd2860e5b159b579",
+  "remotePackageSha256": "90d00ce61140bc801d499ac3af93a80be9c93fddee82f170bd2860e5b159b579",
   "rig": "intent-ops-buzz/omarchy-rig",
-  "runId": "docket-3843982",
-  "rawShellLogSha256": "d2dcf49838bf2ad12b19d713410a233ec114c7bff85c4eb7e934e614047adda5",
+  "runId": "docket-3458873",
+  "rawShellLogSha256": "082c4e8457f2dfb3cf9dfb0a0026faa9d877f6d2b1a14150c694118fdce0c2e2",
   "packageBoundary": "runtime tree plus scrubbed render fixture; receipts, tests, developer scripts, reports, and preview excluded",
   "evidenceBoundary": "isolated real Omarchy shell and QML under a dedicated headless compositor; scrubbed GraphQL fixture through the unchanged Service curl, parse, classify, persist, and three-lane panel path; live IPC toggle and persisted drain primary action; direct full-frame grim capture with no crop or image post-processing",
   "primaryAction": "oldest selected pull request drained and persisted by the live panel",
@@ -19,17 +19,17 @@
   "outputScale": 1.25,
   "visualInspection": {
     "status": "approved",
-    "previewSha256": "ad6e3df396d7bce37308ff51ae277b7213aecfec8a9e69ded3385e69771e9608",
+    "previewSha256": "62ffdd3c4ebe66012a81d62f3b88236d763380a8d298396868606505216540d2",
     "inspector": "jeremylongshore",
-    "inspectedAt": "2026-08-29T23:45:31Z",
+    "inspectedAt": "2026-08-31T23:31:08Z",
     "checks": [
       "product value visible at marketplace scale",
       "no primary content clipped",
       "plugin-specific visual identity"
     ]
   },
-  "previewSha256": "ad6e3df396d7bce37308ff51ae277b7213aecfec8a9e69ded3385e69771e9608",
+  "previewSha256": "62ffdd3c4ebe66012a81d62f3b88236d763380a8d298396868606505216540d2",
   "dimensions": "1280 x 720",
   "nonblackCoverage": 0.38961,
-  "capturedAt": "2026-08-29T23:44:51Z"
+  "capturedAt": "2026-08-31T23:30:52Z"
 }
