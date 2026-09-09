@@ -1,5 +1,20 @@
 # Policy and traceability surfaces not covered by audit-harness defaults.
+.harness-hash-extra-patterns
 .audit-harness.yml
+.github/workflows/*.yml
+.githooks/pre-push
+package.json
+scripts/ci-change-scope.sh
+scripts/run-plugin-gates.sh
+scripts/sync-gate-lane.sh
+scripts/check-lane-freshness.sh
+scripts/rig-verify.sh
+scripts/rig-render.sh
+scripts/gates/.lane-manifest
+scripts/gates/*.sh
+scripts/gates/lib/preamble.sh
+e2e/*.sh
+tests/*.test.js
 stryker.config.json
 tests/TESTING.md
 tests/RTM.md
