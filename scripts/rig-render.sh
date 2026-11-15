@@ -102,6 +102,16 @@ chmod 700 "\$RUNTIME" "\$RIG_ROOT" "\$RIG_ROOT/.config" \
   "\$PLUGIN_DIR" "\$STATE_ROOT" "\$STATE_ROOT/omarchy" \
   "\$STATE_ROOT/omarchy/docket" "\$RIG_BIN"
 tar xzf /tmp/rigrender-\$RUN_ID.tgz -C "\$PLUGIN_DIR"
+# A real Omarchy install always has a current theme. Seed the state
+# omarchy-theme-set writes (current/theme, theme.name, background) with the stock
+# tokyo-night theme: current first-party shell plugins (image-picker, lock) read
+# it from HOME/.local/state and log QML warnings when it is missing, which would
+# otherwise read here as plugin warnings.
+CURRENT="\$RIG_ROOT/.local/state/omarchy/current"
+mkdir -p "\$CURRENT"
+ln -nsf /root/omarchy/themes/tokyo-night "\$CURRENT/theme"
+printf 'tokyo-night\n' > "\$CURRENT/theme.name"
+ln -nsf "\$CURRENT/theme/backgrounds/0-liftoff.webp" "\$CURRENT/background"
 
 # No real token and no network. The fake curl has the same stdin/response
 # contract as the production Process command, so Service.qml still executes
@@ -153,6 +163,7 @@ export PATH="\$RIG_BIN:\$PATH"
 export DOCKET_RENDER_FIXTURE="\$PLUGIN_DIR/e2e/search-render-scrubbed.json"
 qs -p /root/omarchy/shell >"\$QS_LOG" 2>&1 &
 QS_PID=\$!
+QS_STARTED=\$(date +%s)
 
 attempt=0
 while [ \$attempt -lt 30 ]; do
@@ -168,6 +179,15 @@ done
 qs -p /root/omarchy/shell ipc call "\$MOD" toggle >/dev/null 2>&1
 sleep 8
 [ -d "/proc/\$QS_PID" ] || { echo "rig-render: Quickshell exited after IPC" >&2; exit 1; }
+
+# Omarchy's BackgroundIntro covers the bar on a new login until the wallpaper
+# is ready, and lifts that cover after 10 seconds at the latest
+# (shell/services/BackgroundIntro.qml). With the current theme seeded, the rig
+# holds the cover until that fallback, so a capture taken sooner shows the
+# panel over a black strip where the bar should be. Wait out the fallback and
+# its fade so the preview shows the steady-state desktop a user sees.
+while [ \$((\$(date +%s) - QS_STARTED)) -lt 14 ]; do sleep 1; done
+[ -d "/proc/\$QS_PID" ] || { echo "rig-render: Quickshell exited before capture" >&2; exit 1; }
 
 echo "===QML WARNINGS==="
 grep -a -iE "(WARN|ERROR).*(qml|scene)|(qml|scene).*(WARN|ERROR)|cannot assign|is not a type|unable to|handler was registered|quickshell has crashed" "\$QS_LOG" \

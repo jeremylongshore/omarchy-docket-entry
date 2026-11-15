@@ -2,6 +2,9 @@ import QtQuick
 import Quickshell
 import Quickshell.Io
 import qs.Commons
+// Qt 6.12 adds its own Color type, so Omarchy's palette singleton must be
+// qualified (docs/omarchy-shell.md, Theme tokens).
+import qs.Commons as Commons
 import qs.Ui
 import "Model.js" as Model
 
@@ -386,7 +389,7 @@ Panel {
               Text {
                 text: "DOCKET"
                 textFormat: Text.PlainText
-                color: root.bar ? root.bar.foreground : Color.foreground
+                color: root.bar ? root.bar.foreground : Commons.Color.foreground
                 font.family: root.bar ? root.bar.fontFamily : Style.font.family
                 font.pixelSize: Style.font.title
                 font.bold: true
@@ -422,7 +425,7 @@ Panel {
                 // it wrap.
                 width: heroCol.width
                 wrapMode: Text.WordWrap
-                color: root.bar ? Qt.darker(root.bar.foreground, 1.4) : Color.muted
+                color: root.bar ? Qt.darker(root.bar.foreground, 1.4) : Commons.Color.muted
                 font.family: root.bar ? root.bar.fontFamily : Style.font.family
                 font.pixelSize: Style.font.caption
                 font.letterSpacing: 1
@@ -438,7 +441,7 @@ Panel {
             width: parent.width
             spacing: Style.space(4)
 
-            PanelSeparator { foreground: root.bar ? root.bar.foreground : Color.foreground }
+            PanelSeparator { foreground: root.bar ? root.bar.foreground : Commons.Color.foreground }
 
             Text {
               anchors.left: parent.left
@@ -451,7 +454,7 @@ Panel {
               text: "gh auth token | ~/.config/omarchy/plugins/"
                 + "io.github.jeremylongshore.docket/bin/docket-login"
               textFormat: Text.PlainText
-              color: root.bar ? root.bar.foreground : Color.foreground
+              color: root.bar ? root.bar.foreground : Commons.Color.foreground
               font.family: root.bar ? root.bar.fontFamily : Style.font.family
               font.pixelSize: Style.font.body
               font.bold: true
@@ -467,7 +470,7 @@ Panel {
                 + "public_repo works too and shows public pull requests only. GitHub cannot "
                 + "resolve who you are without a token, so there is no unauthenticated mode."
               textFormat: Text.PlainText
-              color: root.bar ? Qt.darker(root.bar.foreground, 1.35) : Color.muted
+              color: root.bar ? Qt.darker(root.bar.foreground, 1.35) : Commons.Color.muted
               font.family: root.bar ? root.bar.fontFamily : Style.font.family
               font.pixelSize: Style.font.caption
             }
@@ -495,7 +498,7 @@ Panel {
                 anchors.bottom: parent.bottom
                 text: rowItem.isHeader ? rowItem.modelData.text : ""
                 leftPadding: Style.space(16)
-                foreground: root.bar ? root.bar.foreground : Color.foreground
+                foreground: root.bar ? root.bar.foreground : Commons.Color.foreground
                 fontFamily: root.bar ? root.bar.fontFamily : Style.font.family
               }
 
@@ -505,7 +508,7 @@ Panel {
                 anchors.leftMargin: Style.space(8)
                 anchors.rightMargin: Style.space(8)
                 radius: Style.cornerRadius
-                color: root.bar ? root.bar.foreground : Color.foreground
+                color: root.bar ? root.bar.foreground : Commons.Color.foreground
                 opacity: 0.12
               }
 
@@ -518,7 +521,7 @@ Panel {
                 elide: Text.ElideRight
                 text: rowItem.isMore ? rowItem.modelData.text : ""
                 textFormat: Text.PlainText
-                color: root.bar ? Qt.darker(root.bar.foreground, 1.45) : Color.muted
+                color: root.bar ? Qt.darker(root.bar.foreground, 1.45) : Commons.Color.muted
                 font.family: root.bar ? root.bar.fontFamily : Style.font.family
                 font.pixelSize: Style.font.caption
               }
@@ -558,7 +561,7 @@ Panel {
                   text: "●"
                   textFormat: Text.PlainText
                   anchors.verticalCenter: parent.verticalCenter
-                  color: root.bar ? root.bar.urgent : Color.urgent
+                  color: root.bar ? root.bar.urgent : Commons.Color.urgent
                   font.family: root.bar ? root.bar.fontFamily : Style.font.family
                   font.pixelSize: Style.font.bodySmall
                 }
@@ -586,7 +589,7 @@ Panel {
                   elide: Text.ElideLeft
                   maximumLineCount: 1
                   width: Math.min(implicitWidth, Math.round(rowLine.width * 0.30))
-                  color: root.bar ? Qt.darker(root.bar.foreground, 1.35) : Color.muted
+                  color: root.bar ? Qt.darker(root.bar.foreground, 1.35) : Commons.Color.muted
                   font.family: root.bar ? root.bar.fontFamily : Style.font.family
                   font.pixelSize: Style.font.bodySmall
                 }
@@ -606,7 +609,7 @@ Panel {
                   text: rowItem.isInert ? "" : rowItem.modelData.title
                   textFormat: Text.PlainText
                   anchors.verticalCenter: parent.verticalCenter
-                  color: root.bar ? root.bar.foreground : Color.foreground
+                  color: root.bar ? root.bar.foreground : Commons.Color.foreground
                   font.family: root.bar ? root.bar.fontFamily : Style.font.family
                   font.pixelSize: Style.font.body
                   font.bold: rowItem.modelData.overdue === true
@@ -634,7 +637,7 @@ Panel {
                   elide: Text.ElideRight
                   maximumLineCount: 1
                   width: Math.min(implicitWidth, Math.round(rowLine.width * 0.30))
-                  color: root.bar ? Qt.darker(root.bar.foreground, 1.45) : Color.muted
+                  color: root.bar ? Qt.darker(root.bar.foreground, 1.45) : Commons.Color.muted
                   font.family: root.bar ? root.bar.fontFamily : Style.font.family
                   font.pixelSize: Style.font.caption
                 }
@@ -651,8 +654,8 @@ Panel {
                 text: rowItem.isInert ? "" : Model.ageText(rowItem.modelData.updatedMs, root.nowMs)
                 textFormat: Text.PlainText
                 color: rowItem.modelData.overdue === true
-                  ? (root.bar ? root.bar.urgent : Color.urgent)
-                  : (root.bar ? Qt.darker(root.bar.foreground, 1.45) : Color.muted)
+                  ? (root.bar ? root.bar.urgent : Commons.Color.urgent)
+                  : (root.bar ? Qt.darker(root.bar.foreground, 1.45) : Commons.Color.muted)
                 font.family: root.bar ? root.bar.fontFamily : Style.font.family
                 font.pixelSize: Style.font.caption
               }
@@ -671,7 +674,7 @@ Panel {
               ? "Docket clear. " + root.drainedCount + " drained; press u to bring them back."
               : "Docket clear. Nothing is waiting on you."
             textFormat: Text.PlainText
-            color: root.bar ? Qt.darker(root.bar.foreground, 1.35) : Color.muted
+            color: root.bar ? Qt.darker(root.bar.foreground, 1.35) : Commons.Color.muted
             font.family: root.bar ? root.bar.fontFamily : Style.font.family
             font.pixelSize: Style.font.body
           }
@@ -681,7 +684,7 @@ Panel {
             width: parent.width
             spacing: Style.space(2)
 
-            PanelSeparator { foreground: root.bar ? root.bar.foreground : Color.foreground }
+            PanelSeparator { foreground: root.bar ? root.bar.foreground : Commons.Color.foreground }
 
             Text {
               anchors.left: parent.left
@@ -692,7 +695,7 @@ Panel {
               // ever made, and "undo" in a list UI means "undo my last action".
               text: "j/k move · enter open · x drain · c drain all · u restore all · r refresh"
               textFormat: Text.PlainText
-              color: root.bar ? Qt.darker(root.bar.foreground, 1.45) : Color.muted
+              color: root.bar ? Qt.darker(root.bar.foreground, 1.45) : Commons.Color.muted
               font.family: root.bar ? root.bar.fontFamily : Style.font.family
               font.pixelSize: Style.font.caption
             }
@@ -704,7 +707,7 @@ Panel {
               wrapMode: Text.WordWrap
               text: "Draining hides a pull request until it changes. Opening one never drains it."
               textFormat: Text.PlainText
-              color: root.bar ? Qt.darker(root.bar.foreground, 1.45) : Color.muted
+              color: root.bar ? Qt.darker(root.bar.foreground, 1.45) : Commons.Color.muted
               font.family: root.bar ? root.bar.fontFamily : Style.font.family
               font.pixelSize: Style.font.caption
             }
