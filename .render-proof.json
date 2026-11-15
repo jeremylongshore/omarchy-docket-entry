@@ -1,12 +1,12 @@
 {
-  "fingerprint": "baa44782036b181e3af51f9496e7b68af21fe81d719b8b2bbcaca09704f8644e",
-  "sourceCommit": "8b6284f8ed39217c3a16c2c1229b19280ee932ef",
+  "fingerprint": "23f3d357830824631e035ddb982518400a650ab83aebc4de8a6a78658ea95581",
+  "sourceCommit": "57624da68c14b1bce13e5248a2ad8a811569afb6",
   "sourceDirty": false,
-  "sourcePackageSha256": "90d00ce61140bc801d499ac3af93a80be9c93fddee82f170bd2860e5b159b579",
-  "remotePackageSha256": "90d00ce61140bc801d499ac3af93a80be9c93fddee82f170bd2860e5b159b579",
+  "sourcePackageSha256": "faf8b10ccca1278039ffcad5a4fc2747dbe88db4b54d3dfff37e4eaa3cd11be1",
+  "remotePackageSha256": "faf8b10ccca1278039ffcad5a4fc2747dbe88db4b54d3dfff37e4eaa3cd11be1",
   "rig": "intent-ops-buzz/omarchy-rig",
-  "runId": "docket-3458873",
-  "rawShellLogSha256": "082c4e8457f2dfb3cf9dfb0a0026faa9d877f6d2b1a14150c694118fdce0c2e2",
+  "runId": "docket-96331",
+  "rawShellLogSha256": "818780fef8b3cec18d556553e8066368115d3b2f66b08a623051621c8f14e33d",
   "packageBoundary": "runtime tree plus scrubbed render fixture; receipts, tests, developer scripts, reports, and preview excluded",
   "evidenceBoundary": "isolated real Omarchy shell and QML under a dedicated headless compositor; scrubbed GraphQL fixture through the unchanged Service curl, parse, classify, persist, and three-lane panel path; live IPC toggle and persisted drain primary action; direct full-frame grim capture with no crop or image post-processing",
   "primaryAction": "oldest selected pull request drained and persisted by the live panel",
@@ -19,17 +19,17 @@
   "outputScale": 1.25,
   "visualInspection": {
     "status": "approved",
-    "previewSha256": "62ffdd3c4ebe66012a81d62f3b88236d763380a8d298396868606505216540d2",
-    "inspector": "jeremylongshore",
-    "inspectedAt": "2026-08-31T23:31:08Z",
+    "previewSha256": "851c6b609b6c2f832704f6489629d0da08b7efa61e03de0a1cf2af100b197937",
+    "inspector": "Claude (agent) for jeremylongshore",
+    "inspectedAt": "2026-11-15T08:43:26Z",
     "checks": [
       "product value visible at marketplace scale",
       "no primary content clipped",
       "plugin-specific visual identity"
     ]
   },
-  "previewSha256": "62ffdd3c4ebe66012a81d62f3b88236d763380a8d298396868606505216540d2",
+  "previewSha256": "851c6b609b6c2f832704f6489629d0da08b7efa61e03de0a1cf2af100b197937",
   "dimensions": "1280 x 720",
   "nonblackCoverage": 0.38961,
-  "capturedAt": "2026-08-31T23:30:52Z"
+  "capturedAt": "2026-11-15T08:43:21Z"
 }
